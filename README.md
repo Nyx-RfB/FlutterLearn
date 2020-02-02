@@ -9,5 +9,4 @@ Pour le moment contient un puissance 4
 -avoir des borders à l'extérieur de la grille (tous les borders des cases sont doublés sauf sur les côtés de la grille)
 -animation de clignotement sur les jetons de victoire
 -animation de descente des jetons (juste du case par case, pas d'animation fluide)
--peut-être avoir un petit peu de padding autour de la grille
 -remplacer les icônes par des images de jeton
