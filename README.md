@@ -10,3 +10,4 @@ Pour le moment contient un puissance 4.
 * animation de clignotement sur les jetons de victoire
 * animation de descente des jetons (juste du case par case, pas d'animation fluide)
 * remplacer les icônes par des images de jeton
+* mettre le scaffold dans main plutôt que home_page pour appeler snackbar plus proprement
