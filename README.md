@@ -1,7 +1,7 @@
 # learning_project
 
 Un projet bac à sable pour apprendre flutter.
-Pour le moment contient un puissance 4
+Pour le moment contient un puissance 4.
 
 ## TODO LIST:
 
