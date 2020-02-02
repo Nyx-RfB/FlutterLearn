@@ -6,11 +6,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
     setState(() {
-      _gameItems = List.filled(42, -1);
+      _gameItems = getDefaultGameItems();
     });
   }
 
@@ -22,7 +24,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Puissance 4"),
+        centerTitle: true,
       ),
+      key: _scaffoldKey,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,6 +51,22 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              MaterialButton(
+                child: Text(
+                  "Recommencer",
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.blueGrey,
+                    fontWeight: FontWeight.bold
+                  ),
+                  ),
+                onPressed: ()=>resetGame(),
+              )
+            ],
+          )
         ],
       ),
     );
@@ -68,7 +88,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _gameItems[_itemToChange] = _currentPlayer;
-      if (checkWin(i)) {
+      if (checkWin(_itemToChange)) {
         victory();
       } else if (!_gameItems.contains(-1))
         draw();
@@ -92,7 +112,7 @@ class _HomePageState extends State<HomePage> {
     var pos = i;
     var counter = 1;
 
-    while ((pos - 1) % 7 < pos % 7 && (pos - 1) > 0 && counter < 4) {
+    while ((pos - 1) % 7 < pos % 7 && (pos - 1) >= 0 && counter < 4) {
       pos--;
       if (_gameItems[pos] == _currentPlayer)
         counter++;
@@ -102,7 +122,9 @@ class _HomePageState extends State<HomePage> {
 
     pos = i;
 
-    while ((pos + 1) % 7 > pos % 7 && (pos + 1) < _gameItems.length && counter < 4) {
+    while ((pos + 1) % 7 > pos % 7 &&
+        (pos + 1) < _gameItems.length &&
+        counter < 4) {
       pos++;
       if (_gameItems[pos] == _currentPlayer)
         counter++;
@@ -110,14 +132,25 @@ class _HomePageState extends State<HomePage> {
         break;
     }
 
-    return counter == 4;
+    return counter >= 4;
   }
 
   bool checkVertical(int i) {
-    var ret = false;
+    var pos = i;
+    var counter = 1;
 
-    return ret;
-  }
+    pos = i;
+
+    while ((pos + 7) < _gameItems.length &&
+        counter < 4) {
+      pos+=7;
+      if (_gameItems[pos] == _currentPlayer)
+        counter++;
+      else
+        break;
+    }
+
+    return counter >= 4;  }
 
   bool checkDescOblique(int i) {
     var ret = false;
@@ -136,14 +169,47 @@ class _HomePageState extends State<HomePage> {
       case -1:
         return null;
       case 0:
-        return Icon(Icons.brightness_1, color: Colors.red);
+        return Icon(Icons.brightness_1, color: getColorFromPlayer(gameItem));
       case 1:
-        return Icon(Icons.brightness_1, color: Colors.yellow);
+        return Icon(Icons.brightness_1, color: getColorFromPlayer(gameItem));
       default:
         return null;
     }
   }
 
-  victory() {}
-  draw() {}
+  Color getColorFromPlayer(int player) {
+    switch (player) {
+      case 0:
+        return Colors.red;
+      case 1:
+        return Colors.yellow;
+      default:
+        return Colors.transparent;
+    }
+  }
+
+  victory() {
+    _isGameOver = true;
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Victoire!"),
+      backgroundColor: getColorFromPlayer(_currentPlayer),
+      duration: Duration(seconds: 3),
+    ));
+  }
+
+  draw() {
+    _isGameOver = true;
+  }
+
+  resetGame() {
+    setState(() {
+      _currentPlayer = 0;
+      _gameItems = getDefaultGameItems();
+      _isGameOver = false;
+    });
+  }
+
+  List<int> getDefaultGameItems() {
+    return List.filled(42, -1);
+  }
 }
