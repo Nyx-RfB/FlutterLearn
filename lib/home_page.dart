@@ -32,39 +32,37 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-              ),
-              itemCount: _gameItems.length,
-              itemBuilder: (context, i) => SizedBox(
-                child: Container(
-                  decoration: new BoxDecoration(
-                      border: new Border.all(width: 1, color: Colors.black)),
-                  child: MaterialButton(
-                    onPressed: () => playGame(i),
-                    child: getIcon(_gameItems[i]),
-                  ),
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 7,
                 ),
-                height: 50,
-                width: 50,
+                itemCount: _gameItems.length,
+                itemBuilder: (context, i) => SizedBox(
+                  child: Container(
+                    decoration: new BoxDecoration(
+                        border: new Border.all(width: 1, color: Colors.black)),
+                    child: MaterialButton(
+                      onPressed: () => playGame(i),
+                      child: getIcon(_gameItems[i]),
+                    ),
+                  ),
+                  height: 50,
+                  width: 50,
+                ),
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              MaterialButton(
-                child: Text(
-                  "Recommencer",
-                  style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.blueGrey,
-                      fontWeight: FontWeight.bold),
-                ),
-                onPressed: () => resetGame(),
-              )
-            ],
+          MaterialButton(
+            child: Text(
+              "Recommencer",
+              style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.blueGrey,
+                  fontWeight: FontWeight.bold),
+            ),
+            onPressed: () => resetGame(),
           )
         ],
       ),
@@ -225,15 +223,20 @@ class _HomePageState extends State<HomePage> {
 
   victory() {
     _isGameOver = true;
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Victoire!"),
-      backgroundColor: getColorFromPlayer(_currentPlayer),
-      duration: Duration(seconds: 3),
-    ));
+    showFullSnackBar('Victoire !', getColorFromPlayer(_currentPlayer));
   }
 
   draw() {
     _isGameOver = true;
+    showFullSnackBar('Égalité !', Colors.orange);
+  }
+
+  void showFullSnackBar(String text, Color textColor) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Center(child: Text(text)),
+      backgroundColor: textColor,
+      duration: Duration(seconds: 2),
+    ));
   }
 
   resetGame() {
