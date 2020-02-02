@@ -58,12 +58,11 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   "Recommencer",
                   style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.blueGrey,
-                    fontWeight: FontWeight.bold
-                  ),
-                  ),
-                onPressed: ()=>resetGame(),
+                      fontSize: 30,
+                      color: Colors.blueGrey,
+                      fontWeight: FontWeight.bold),
+                ),
+                onPressed: () => resetGame(),
               )
             ],
           )
@@ -112,7 +111,7 @@ class _HomePageState extends State<HomePage> {
     var pos = i;
     var counter = 1;
 
-    while ((pos - 1) % 7 < pos % 7 && (pos - 1) >= 0 && counter < 4) {
+    while ((pos - 1) % 7 < pos % 7 && (pos - 1) >= 0) {
       pos--;
       if (_gameItems[pos] == _currentPlayer)
         counter++;
@@ -122,9 +121,7 @@ class _HomePageState extends State<HomePage> {
 
     pos = i;
 
-    while ((pos + 1) % 7 > pos % 7 &&
-        (pos + 1) < _gameItems.length &&
-        counter < 4) {
+    while ((pos + 1) % 7 > pos % 7 && (pos + 1) < _gameItems.length) {
       pos++;
       if (_gameItems[pos] == _currentPlayer)
         counter++;
@@ -141,27 +138,65 @@ class _HomePageState extends State<HomePage> {
 
     pos = i;
 
-    while ((pos + 7) < _gameItems.length &&
-        counter < 4) {
-      pos+=7;
+    while ((pos + 7) < _gameItems.length) {
+      pos += 7;
       if (_gameItems[pos] == _currentPlayer)
         counter++;
       else
         break;
     }
 
-    return counter >= 4;  }
+    return counter >= 4;
+  }
 
   bool checkDescOblique(int i) {
-    var ret = false;
+    var pos = i;
+    var counter = 1;
 
-    return ret;
+    while ((pos - 1) % 7 < pos % 7 && (pos - 8) >= 0) {
+      pos -= 8;
+      if (_gameItems[pos] == _currentPlayer)
+        counter++;
+      else
+        break;
+    }
+
+    pos = i;
+
+    while ((pos + 1) % 7 > pos % 7 && (pos + 8) < _gameItems.length) {
+      pos += 8;
+      if (_gameItems[pos] == _currentPlayer)
+        counter++;
+      else
+        break;
+    }
+
+    return counter >= 4;
   }
 
   bool checkAscOblique(int i) {
-    var ret = false;
+    var pos = i;
+    var counter = 1;
 
-    return ret;
+    while ((pos - 1) % 7 < pos % 7 && (pos + 6) < _gameItems.length) {
+      pos += 6;
+      if (_gameItems[pos] == _currentPlayer)
+        counter++;
+      else
+        break;
+    }
+
+    pos = i;
+
+    while ((pos + 1) % 7 > pos % 7 && (pos - 6) >= 0) {
+      pos -= 6;
+      if (_gameItems[pos] == _currentPlayer)
+        counter++;
+      else
+        break;
+    }
+
+    return counter >= 4;
   }
 
   Icon getIcon(int gameItem) {
