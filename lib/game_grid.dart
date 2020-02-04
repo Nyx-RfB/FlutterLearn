@@ -24,7 +24,8 @@ class GameGrid extends StatelessWidget {
       itemBuilder: (context, i) => SizedBox(
         child: Container(
           decoration: new BoxDecoration(
-              border: new Border.all(width: 1, color: Colors.black)),
+            border: getBorderFromIndex(i),
+          ),
           child: MaterialButton(
             onPressed: () => playGame(i),
             child: GameHelper.getIconFromPlayer(gameItems[i]),
@@ -49,5 +50,15 @@ class GameGrid extends StatelessWidget {
     }
 
     onTurnIsOver(_itemToChange);
+  }
+
+  Border getBorderFromIndex(int i)
+  {
+    return new Border(
+      bottom: BorderSide(color: Colors.black, width: i>= 35? 2 : 1),
+      top: BorderSide(color: Colors.black, width: i< 7? 2 : 1),
+      left: BorderSide(color: Colors.black, width: i%7 == 0? 2 : 1),
+      right: BorderSide(color: Colors.black, width: i%7 == 6? 2 : 1),
+    );
   }
 }
