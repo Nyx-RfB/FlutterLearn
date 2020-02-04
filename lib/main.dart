@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:learning_project/home_page.dart';
-
+import 'package:learning_project/game_controller.dart';
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.red, 
+        primarySwatch: Colors.red,
       ),
-      home: HomePage(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Puissance 4"),
+          centerTitle: true,
+        ),
+        body: GameController(),
+      ),
     );
   }
 }
