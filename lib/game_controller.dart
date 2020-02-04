@@ -16,7 +16,7 @@ class _GameControllerState extends State<GameController> {
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Expanded(
-          flex: 6,
+          flex: 1,
           child: Padding(
             padding: EdgeInsets.all(10),
             child: GameGrid(
@@ -36,16 +36,20 @@ class _GameControllerState extends State<GameController> {
           ),
         ),
         Expanded(
-          flex: 4,
-          child: MaterialButton(
-            child: Text(
-              "Recommencer",
-              style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.blueGrey,
-                  fontWeight: FontWeight.bold),
-            ),
-            onPressed: () => resetGame(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              MaterialButton(
+                child: Text(
+                  "Recommencer",
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.blueGrey,
+                      fontWeight: FontWeight.bold),
+                ),
+                onPressed: () => resetGame(),
+              ),
+            ],
           ),
         ),
       ],
@@ -193,13 +197,13 @@ class _GameControllerState extends State<GameController> {
   void showFullSnackBar(String text, Color barColor) {
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 40,
-          ),
-        )),
+          child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 40,
+        ),
+      )),
       backgroundColor: barColor,
       duration: Duration(seconds: 2),
     ));
