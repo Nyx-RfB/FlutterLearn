@@ -13,8 +13,10 @@ class _GameControllerState extends State<GameController> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Expanded(
+          flex: 6,
           child: Padding(
             padding: EdgeInsets.all(10),
             child: GameGrid(
@@ -33,16 +35,19 @@ class _GameControllerState extends State<GameController> {
             ),
           ),
         ),
-        MaterialButton(
-          child: Text(
-            "Recommencer",
-            style: TextStyle(
-                fontSize: 30,
-                color: Colors.blueGrey,
-                fontWeight: FontWeight.bold),
+        Expanded(
+          flex: 4,
+          child: MaterialButton(
+            child: Text(
+              "Recommencer",
+              style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.blueGrey,
+                  fontWeight: FontWeight.bold),
+            ),
+            onPressed: () => resetGame(),
           ),
-          onPressed: () => resetGame(),
-        )
+        ),
       ],
     );
   }
@@ -185,10 +190,17 @@ class _GameControllerState extends State<GameController> {
     showFullSnackBar('Égalité !', Colors.orange);
   }
 
-  void showFullSnackBar(String text, Color textColor) {
+  void showFullSnackBar(String text, Color barColor) {
     Scaffold.of(context).showSnackBar(SnackBar(
-      content: Center(child: Text(text)),
-      backgroundColor: textColor,
+      content: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 40,
+          ),
+        )),
+      backgroundColor: barColor,
       duration: Duration(seconds: 2),
     ));
   }
