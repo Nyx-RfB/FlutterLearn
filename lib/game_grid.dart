@@ -21,18 +21,16 @@ class GameGrid extends StatelessWidget {
         crossAxisCount: 7,
       ),
       itemCount: gameItems.length,
-      itemBuilder: (context, i) => SizedBox(
-        child: Container(
-          decoration: new BoxDecoration(
-            border: getBorderFromIndex(i),
-          ),
-          child: MaterialButton(
-            onPressed: () => playGame(i),
-            child: GameHelper.getIconFromPlayer(gameItems[i]),
-          ),
+      itemBuilder: (context, i) => Container(
+        decoration: new BoxDecoration(
+          border: getBorderFromIndex(i),
         ),
         height: 50,
         width: 50,
+        child: MaterialButton(
+          onPressed: () => playGame(i),
+          child: GameHelper.getIconFromPlayer(gameItems[i]),
+        ),
       ),
     );
   }
