@@ -7,7 +7,11 @@ class GameController extends StatefulWidget {
   _GameControllerState createState() => _GameControllerState();
 }
 
-class _GameControllerState extends State<GameController> {
+class _GameControllerState extends State<GameController>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<Color> _colorAnimation;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,7 +49,7 @@ class _GameControllerState extends State<GameController> {
                   "Recommencer",
                   style: TextStyle(
                       fontSize: 30,
-                      color: Colors.blueGrey,
+                      color: _colorAnimation.value,
                       fontWeight: FontWeight.bold),
                 ),
                 onPressed: () => resetGame(),
@@ -60,9 +64,16 @@ class _GameControllerState extends State<GameController> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _gameItems = getDefaultGameItems();
+    _gameItems = getDefaultGameItems();
+    _controller = new AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    );
+    _controller.addListener(() {
+      setState(() {});
     });
+    _colorAnimation = new ColorTween(begin: Colors.grey, end: Colors.green)
+        .animate(_controller);
   }
 
   List<int> _gameItems;
@@ -75,6 +86,7 @@ class _GameControllerState extends State<GameController> {
       _gameItems = getDefaultGameItems();
       _isGameOver = false;
     });
+    _controller.reset();
   }
 
   List<int> getDefaultGameItems() {
@@ -185,14 +197,19 @@ class _GameControllerState extends State<GameController> {
   }
 
   victory() {
-    _isGameOver = true;
     showFullSnackBar(
         'Victoire !', GameHelper.getColorFromPlayer(_currentPlayer));
+    endGame();
   }
 
   draw() {
-    _isGameOver = true;
     showFullSnackBar('Égalité !', Colors.orange);
+    endGame();
+  }
+
+  endGame() {
+    _isGameOver = true;
+    _controller.repeat(reverse: true);
   }
 
   void showFullSnackBar(String text, Color barColor) {
@@ -208,5 +225,11 @@ class _GameControllerState extends State<GameController> {
       backgroundColor: barColor,
       duration: Duration(seconds: 2),
     ));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }
