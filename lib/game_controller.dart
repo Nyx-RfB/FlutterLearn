@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_project/game_grid.dart';
 import 'package:learning_project/game_helper.dart';
+import 'token_slot.dart';
 
 class GameController extends StatefulWidget {
   @override
@@ -9,8 +10,10 @@ class GameController extends StatefulWidget {
 
 class _GameControllerState extends State<GameController>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<Color> _colorAnimation;
+  AnimationController _resetButtonController;
+  Animation<Color> _resetButton;
+
+  static const victoryNumber = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +30,11 @@ class _GameControllerState extends State<GameController>
               currentPlayer: _currentPlayer,
               gameItems: _gameItems,
               isGameOver: _isGameOver,
-              onTurnIsOver: (index) => setState(() {
-                _gameItems[index] = _currentPlayer;
+              onTokenPlayed: (index) => setState(() {
+                _gameItems[index].tokenValue = _currentPlayer;
                 if (checkWin(index)) {
                   victory();
-                } else if (!_gameItems.contains(-1))
+                } else if (!_gameItems.any((t) => t.tokenValue == -1))
                   draw();
                 else
                   changePlayer();
@@ -49,7 +52,7 @@ class _GameControllerState extends State<GameController>
                   "Recommencer",
                   style: TextStyle(
                       fontSize: 30,
-                      color: _colorAnimation.value,
+                      color: _resetButton.value,
                       fontWeight: FontWeight.bold),
                 ),
                 onPressed: () => resetGame(),
@@ -65,18 +68,18 @@ class _GameControllerState extends State<GameController>
   void initState() {
     super.initState();
     _gameItems = getDefaultGameItems();
-    _controller = new AnimationController(
+    _resetButtonController = new AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
-    _controller.addListener(() {
+    _resetButtonController.addListener(() {
       setState(() {});
     });
-    _colorAnimation = new ColorTween(begin: Colors.grey, end: Colors.green)
-        .animate(_controller);
+    _resetButton = new ColorTween(begin: Colors.grey, end: Colors.green)
+        .animate(_resetButtonController);
   }
 
-  List<int> _gameItems;
+  List<TokenSlot> _gameItems;
   int _currentPlayer = 0;
   bool _isGameOver = false;
 
@@ -86,11 +89,11 @@ class _GameControllerState extends State<GameController>
       _gameItems = getDefaultGameItems();
       _isGameOver = false;
     });
-    _controller.reset();
+    _resetButtonController.reset();
   }
 
-  List<int> getDefaultGameItems() {
-    return List.filled(42, -1);
+  List<TokenSlot> getDefaultGameItems() {
+    return List.generate(42,(i) => new TokenSlot());
   }
 
   changePlayer() {
@@ -104,15 +107,22 @@ class _GameControllerState extends State<GameController>
         checkAscOblique(i);
   }
 
+  void confirmVictoryState(bool isVictory) {
+    _gameItems.where((f) => f.isPartOfVictory == eVictoryState.maybe).forEach(
+        (f) => f.isPartOfVictory =
+            isVictory ? eVictoryState.yes : eVictoryState.no);
+  }
+
   bool checkHorizontal(int i) {
     var pos = i;
     var counter = 1;
 
     while ((pos - 1) % 7 < pos % 7 && (pos - 1) >= 0) {
       pos--;
-      if (_gameItems[pos] == _currentPlayer)
+      if (_gameItems[pos].tokenValue == _currentPlayer) {
         counter++;
-      else
+        _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
+      } else
         break;
     }
 
@@ -120,13 +130,16 @@ class _GameControllerState extends State<GameController>
 
     while ((pos + 1) % 7 > pos % 7 && (pos + 1) < _gameItems.length) {
       pos++;
-      if (_gameItems[pos] == _currentPlayer)
+      if (_gameItems[pos].tokenValue == _currentPlayer) {
         counter++;
-      else
+        _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
+      } else
         break;
     }
 
-    return counter >= 4;
+    confirmVictoryState(counter >= victoryNumber);
+
+    return counter >= victoryNumber;
   }
 
   bool checkVertical(int i) {
@@ -137,13 +150,16 @@ class _GameControllerState extends State<GameController>
 
     while ((pos + 7) < _gameItems.length) {
       pos += 7;
-      if (_gameItems[pos] == _currentPlayer)
+      if (_gameItems[pos].tokenValue == _currentPlayer) {
+        _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
         counter++;
-      else
+      } else
         break;
     }
 
-    return counter >= 4;
+    confirmVictoryState(counter >= victoryNumber);
+
+    return counter >= victoryNumber;
   }
 
   bool checkDescOblique(int i) {
@@ -152,9 +168,10 @@ class _GameControllerState extends State<GameController>
 
     while ((pos - 1) % 7 < pos % 7 && (pos - 8) >= 0) {
       pos -= 8;
-      if (_gameItems[pos] == _currentPlayer)
+      if (_gameItems[pos].tokenValue == _currentPlayer) {
         counter++;
-      else
+        _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
+      } else
         break;
     }
 
@@ -162,13 +179,16 @@ class _GameControllerState extends State<GameController>
 
     while ((pos + 1) % 7 > pos % 7 && (pos + 8) < _gameItems.length) {
       pos += 8;
-      if (_gameItems[pos] == _currentPlayer)
+      if (_gameItems[pos].tokenValue == _currentPlayer) {
+        _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
         counter++;
-      else
+      } else
         break;
     }
 
-    return counter >= 4;
+    confirmVictoryState(counter >= victoryNumber);
+
+    return counter >= victoryNumber;
   }
 
   bool checkAscOblique(int i) {
@@ -177,8 +197,9 @@ class _GameControllerState extends State<GameController>
 
     while ((pos - 1) % 7 < pos % 7 && (pos + 6) < _gameItems.length) {
       pos += 6;
-      if (_gameItems[pos] == _currentPlayer)
-        counter++;
+      if (_gameItems[pos].tokenValue == _currentPlayer){
+        _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
+        counter++;}
       else
         break;
     }
@@ -187,13 +208,16 @@ class _GameControllerState extends State<GameController>
 
     while ((pos + 1) % 7 > pos % 7 && (pos - 6) >= 0) {
       pos -= 6;
-      if (_gameItems[pos] == _currentPlayer)
-        counter++;
+      if (_gameItems[pos].tokenValue == _currentPlayer){
+        _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
+        counter++;}
       else
         break;
     }
 
-    return counter >= 4;
+    confirmVictoryState(counter >= victoryNumber);
+
+    return counter >= victoryNumber;
   }
 
   victory() {
@@ -209,7 +233,7 @@ class _GameControllerState extends State<GameController>
 
   endGame() {
     _isGameOver = true;
-    _controller.repeat(reverse: true);
+    _resetButtonController.repeat(reverse: true);
   }
 
   void showFullSnackBar(String text, Color barColor) {
@@ -230,6 +254,6 @@ class _GameControllerState extends State<GameController>
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _resetButtonController.dispose();
   }
 }

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:learning_project/game_helper.dart';
+import 'token_slot.dart';
 
 class GameGrid extends StatelessWidget {
-  final List<int> gameItems;
+  final List<TokenSlot> gameItems;
   final bool isGameOver;
   final int currentPlayer;
-  final void Function(int) onTurnIsOver;
+  final void Function(int) onTokenPlayed;
 
   GameGrid({
     @required this.gameItems,
     @required this.isGameOver,
     @required this.currentPlayer,
-    @required this.onTurnIsOver,
+    @required this.onTokenPlayed,
   });
 
   @override
@@ -29,7 +30,7 @@ class GameGrid extends StatelessWidget {
         width: 50,
         child: MaterialButton(
           onPressed: () => playGame(i),
-          child: GameHelper.getIconFromPlayer(gameItems[i]),
+          child: GameHelper.getIconFromPlayer(gameItems[i].tokenValue),
         ),
       ),
     );
@@ -40,14 +41,14 @@ class GameGrid extends StatelessWidget {
 
     var _itemToChange = i % 7;
 
-    if (gameItems[_itemToChange] > -1) return;
+    if (gameItems[_itemToChange].tokenValue > -1) return;
 
     while ((_itemToChange + 7) < gameItems.length &&
-        gameItems[_itemToChange + 7] < 0) {
+        gameItems[_itemToChange + 7].tokenValue < 0) {
       _itemToChange += 7;
     }
 
-    onTurnIsOver(_itemToChange);
+    onTokenPlayed(_itemToChange);
   }
 
   Border getBorderFromIndex(int i) {
