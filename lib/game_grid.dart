@@ -7,12 +7,14 @@ class GameGrid extends StatelessWidget {
   final bool isGameOver;
   final int currentPlayer;
   final void Function(int) onTokenPlayed;
+  final Color victoryColor;
 
   GameGrid({
     @required this.gameItems,
     @required this.isGameOver,
     @required this.currentPlayer,
     @required this.onTokenPlayed,
+    @required this.victoryColor,
   });
 
   @override
@@ -24,8 +26,11 @@ class GameGrid extends StatelessWidget {
       itemCount: gameItems.length,
       itemBuilder: (context, i) => Container(
         decoration: new BoxDecoration(
+          color: gameItems[i].isPartOfVictory == eVictoryState.yes
+            ? victoryColor
+            : Colors.transparent,
           border: getBorderFromIndex(i),
-        ),
+        ),        
         height: 50,
         width: 50,
         child: MaterialButton(
