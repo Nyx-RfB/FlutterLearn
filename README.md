@@ -8,3 +8,4 @@ Pour le moment contient un puissance 4.
 * animation de descente des jetons
 * remplacer les icônes par des images de jeton
 * ajout d'un compteur de victoires & égalités
+* réorganiser le code pour tenter une séparation UI/métier
