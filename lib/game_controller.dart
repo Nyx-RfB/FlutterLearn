@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_project/enums.dart';
 import 'package:learning_project/game_grid.dart';
 import 'package:learning_project/game_helper.dart';
 import 'token_slot.dart';
@@ -33,10 +34,11 @@ class _GameControllerState extends State<GameController>
               isGameOver: _isGameOver,
               victoryColor: _victoryAnimation.value,
               onTokenPlayed: (index) => setState(() {
-                _gameItems[index].tokenValue = _currentPlayer;
+                _gameItems[index].tokenPlayer = _currentPlayer;
                 if (checkWin(index)) {
                   victory();
-                } else if (!_gameItems.any((t) => t.tokenValue == -1))
+                } else if (!_gameItems
+                    .any((t) => t.tokenPlayer == ePlayer.none))
                   draw();
                 else
                   changePlayer();
@@ -88,12 +90,12 @@ class _GameControllerState extends State<GameController>
   }
 
   List<TokenSlot> _gameItems;
-  int _currentPlayer = 0;
+  ePlayer _currentPlayer = ePlayer.player1;
   bool _isGameOver = false;
 
   resetGame() {
     setState(() {
-      _currentPlayer = 0;
+      _currentPlayer = ePlayer.player1;
       _gameItems = getDefaultGameItems();
       _isGameOver = false;
     });
@@ -105,7 +107,8 @@ class _GameControllerState extends State<GameController>
   }
 
   changePlayer() {
-    _currentPlayer = 1 - _currentPlayer;
+    _currentPlayer =
+        _currentPlayer == ePlayer.player1 ? ePlayer.player2 : ePlayer.player1;
   }
 
   bool checkWin(int i) {
@@ -131,7 +134,7 @@ class _GameControllerState extends State<GameController>
 
     while ((pos - 1) % 7 < pos % 7 && (pos - 1) >= 0) {
       pos--;
-      if (_gameItems[pos].tokenValue == _currentPlayer) {
+      if (_gameItems[pos].tokenPlayer == _currentPlayer) {
         counter++;
         _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
       } else
@@ -142,7 +145,7 @@ class _GameControllerState extends State<GameController>
 
     while ((pos + 1) % 7 > pos % 7 && (pos + 1) < _gameItems.length) {
       pos++;
-      if (_gameItems[pos].tokenValue == _currentPlayer) {
+      if (_gameItems[pos].tokenPlayer == _currentPlayer) {
         counter++;
         _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
       } else
@@ -160,7 +163,7 @@ class _GameControllerState extends State<GameController>
 
     while ((pos + 7) < _gameItems.length) {
       pos += 7;
-      if (_gameItems[pos].tokenValue == _currentPlayer) {
+      if (_gameItems[pos].tokenPlayer == _currentPlayer) {
         _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
         counter++;
       } else
@@ -178,7 +181,7 @@ class _GameControllerState extends State<GameController>
 
     while ((pos - 1) % 7 < pos % 7 && (pos - 8) >= 0) {
       pos -= 8;
-      if (_gameItems[pos].tokenValue == _currentPlayer) {
+      if (_gameItems[pos].tokenPlayer == _currentPlayer) {
         counter++;
         _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
       } else
@@ -189,7 +192,7 @@ class _GameControllerState extends State<GameController>
 
     while ((pos + 1) % 7 > pos % 7 && (pos + 8) < _gameItems.length) {
       pos += 8;
-      if (_gameItems[pos].tokenValue == _currentPlayer) {
+      if (_gameItems[pos].tokenPlayer == _currentPlayer) {
         _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
         counter++;
       } else
@@ -207,7 +210,7 @@ class _GameControllerState extends State<GameController>
 
     while ((pos - 1) % 7 < pos % 7 && (pos + 6) < _gameItems.length) {
       pos += 6;
-      if (_gameItems[pos].tokenValue == _currentPlayer) {
+      if (_gameItems[pos].tokenPlayer == _currentPlayer) {
         _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
         counter++;
       } else
@@ -218,7 +221,7 @@ class _GameControllerState extends State<GameController>
 
     while ((pos + 1) % 7 > pos % 7 && (pos - 6) >= 0) {
       pos -= 6;
-      if (_gameItems[pos].tokenValue == _currentPlayer) {
+      if (_gameItems[pos].tokenPlayer == _currentPlayer) {
         _gameItems[pos].isPartOfVictory = eVictoryState.maybe;
         counter++;
       } else

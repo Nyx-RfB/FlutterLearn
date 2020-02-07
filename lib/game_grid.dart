@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:learning_project/game_helper.dart';
 import 'token_slot.dart';
+import 'enums.dart';
 
 class GameGrid extends StatelessWidget {
   final List<TokenSlot> gameItems;
   final bool isGameOver;
-  final int currentPlayer;
+  final ePlayer currentPlayer;
   final void Function(int) onTokenPlayed;
   final Color victoryColor;
 
@@ -35,7 +36,7 @@ class GameGrid extends StatelessWidget {
         width: 50,
         child: MaterialButton(
           onPressed: () => playGame(i),
-          child: GameHelper.getIconFromPlayer(gameItems[i].tokenValue),
+          child: GameHelper.getIconFromPlayer(gameItems[i].tokenPlayer),
         ),
       ),
     );
@@ -46,10 +47,10 @@ class GameGrid extends StatelessWidget {
 
     var _itemToChange = i % 7;
 
-    if (gameItems[_itemToChange].tokenValue > -1) return;
+    if (gameItems[_itemToChange].tokenPlayer != ePlayer.none) return;
 
     while ((_itemToChange + 7) < gameItems.length &&
-        gameItems[_itemToChange + 7].tokenValue < 0) {
+        gameItems[_itemToChange + 7].tokenPlayer == ePlayer.none) {
       _itemToChange += 7;
     }
 

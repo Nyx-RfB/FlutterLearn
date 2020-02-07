@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_project/enums.dart';
 
 class GameHelper {
   static GameHelper _instance;
@@ -6,23 +7,23 @@ class GameHelper {
 
   GameHelper._();
 
-  static Color getColorFromPlayer(int player) {
+  static Color getColorFromPlayer(ePlayer player) {
     switch (player) {
-      case 0:
+      case ePlayer.player1:
         return Colors.red;
-      case 1:
+      case ePlayer.player2:
         return Colors.yellow;
       default:
         return Colors.transparent;
     }
   }
 
-  static Icon getIconFromPlayer(int gameItem) {
-    switch (gameItem) {
-      case 0:
-        return Icon(Icons.brightness_1, color: getColorFromPlayer(gameItem));
-      case 1:
-        return Icon(Icons.brightness_1, color: getColorFromPlayer(gameItem));
+  static Icon getIconFromPlayer(ePlayer player) {
+    switch (player) {
+      case ePlayer.player1:
+        return Icon(Icons.brightness_1, color: getColorFromPlayer(player));
+      case ePlayer.player2:
+        return Icon(Icons.brightness_1, color: getColorFromPlayer(player));
       default:
         return null;
     }

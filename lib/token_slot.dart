@@ -1,15 +1,11 @@
+import 'enums.dart';
+
 class TokenSlot {
-  int tokenValue;
+  ePlayer tokenPlayer;
   eVictoryState isPartOfVictory;
 
   TokenSlot() {
-    tokenValue = -1;
+    tokenPlayer = ePlayer.none;
     isPartOfVictory = eVictoryState.no;
   }
-}
-
-enum eVictoryState {
-  yes,
-  no,
-  maybe,
 }
