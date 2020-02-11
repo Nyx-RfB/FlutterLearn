@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:learning_project/enums.dart';
 import 'package:learning_project/game_grid.dart';
 import 'package:learning_project/game_helper.dart';
-import 'token_slot.dart';
+import 'package:learning_project/token_slot.dart';
 
 class GameController extends StatefulWidget {
   @override

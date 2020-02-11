@@ -1,4 +1,4 @@
-import 'enums.dart';
+import 'package:learning_project/enums.dart';
 
 class TokenSlot {
   ePlayer tokenPlayer;

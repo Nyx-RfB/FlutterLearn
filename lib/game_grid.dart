@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_project/game_helper.dart';
-import 'token_slot.dart';
-import 'enums.dart';
+import 'package:learning_project/token_slot.dart';
+import 'package:learning_project/enums.dart';
 
 class GameGrid extends StatelessWidget {
   final List<TokenSlot> gameItems;
