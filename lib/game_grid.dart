@@ -36,6 +36,7 @@ class GameGrid extends StatelessWidget {
         width: 50,
         child: MaterialButton(
             onPressed: () => playGame(i),
+            padding: EdgeInsets.all(0),
             child: Container(
               //TODO animate here
               transform: Matrix4.translationValues(0, 0, 0),

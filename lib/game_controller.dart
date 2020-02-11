@@ -25,7 +25,7 @@ class _GameControllerState extends State<GameController>
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Expanded(
-          flex: 3,
+          flex: 5,
           child: Padding(
             padding: EdgeInsets.all(10),
             child: GameGrid(
@@ -47,7 +47,7 @@ class _GameControllerState extends State<GameController>
           ),
         ),
         Expanded(
-          flex: 2,
+          flex: 3,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
