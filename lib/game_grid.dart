@@ -28,16 +28,19 @@ class GameGrid extends StatelessWidget {
       itemBuilder: (context, i) => Container(
         decoration: new BoxDecoration(
           color: gameItems[i].isPartOfVictory == eVictoryState.yes
-            ? victoryColor
-            : Colors.transparent,
+              ? victoryColor
+              : Colors.transparent,
           border: getBorderFromIndex(i),
-        ),        
+        ),
         height: 50,
         width: 50,
         child: MaterialButton(
-          onPressed: () => playGame(i),
-          child: GameHelper.getIconFromPlayer(gameItems[i].tokenPlayer),
-        ),
+            onPressed: () => playGame(i),
+            child: Container(
+              //TODO animate here
+              transform: Matrix4.translationValues(0, 0, 0),
+              child: GameHelper.getIconFromPlayer(gameItems[i].tokenPlayer),
+            )),
       ),
     );
   }
