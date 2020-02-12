@@ -9,6 +9,7 @@ class GameGrid extends StatelessWidget {
   final ePlayer currentPlayer;
   final void Function(int) onTokenPlayed;
   final Color victoryColor;
+  final List<Animation> tokenAnimations;
 
   GameGrid({
     @required this.gameItems,
@@ -16,6 +17,7 @@ class GameGrid extends StatelessWidget {
     @required this.currentPlayer,
     @required this.onTokenPlayed,
     @required this.victoryColor,
+    @required this.tokenAnimations,
   });
 
   @override
@@ -38,8 +40,7 @@ class GameGrid extends StatelessWidget {
             onPressed: () => playGame(i),
             padding: EdgeInsets.all(0),
             child: Container(
-              //TODO animate here
-              transform: Matrix4.translationValues(0, 0, 0),
+              transform: Matrix4.translationValues(0, tokenAnimations[i].value, 0),
               child: GameHelper.getIconFromPlayer(gameItems[i].tokenPlayer),
             )),
       ),

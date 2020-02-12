@@ -10,7 +10,7 @@ class GameController extends StatefulWidget {
 }
 
 class _GameControllerState extends State<GameController>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   AnimationController _gameOverAnimationController;
   Animation<Color> _resetButtonAnimation;
   Animation<Color> _victoryAnimation;
@@ -33,16 +33,8 @@ class _GameControllerState extends State<GameController>
               gameItems: _gameItems,
               isGameOver: _isGameOver,
               victoryColor: _victoryAnimation.value,
-              onTokenPlayed: (index) => setState(() {
-                _gameItems[index].tokenPlayer = _currentPlayer;
-                if (checkWin(index)) {
-                  victory();
-                } else if (!_gameItems
-                    .any((t) => t.tokenPlayer == ePlayer.none))
-                  draw();
-                else
-                  changePlayer();
-              }),
+              onTokenPlayed: (index) => tokenPlayed(index),
+              tokenAnimations: _tokenAnimations,
             ),
           ),
         ),
@@ -68,10 +60,41 @@ class _GameControllerState extends State<GameController>
     );
   }
 
+  void tokenPlayed(int index) {
+    setState(() {
+      _gameItems[index].tokenPlayer = _currentPlayer;
+      if (checkWin(index)) {
+        victory();
+      } else if (!_gameItems.any((t) => t.tokenPlayer == ePlayer.none))
+        draw();
+      else
+        changePlayer();
+    });
+    _tokenAnimationControllers[index].forward();
+  }
+
   @override
   void initState() {
     super.initState();
     _gameItems = getDefaultGameItems();
+
+    _tokenAnimationControllers = new List();
+    _tokenAnimations = new List();
+    for (var i = 0; i < _gameItems.length; i++) {
+      var row = ((i / 7).floor() + 1);
+      _tokenAnimationControllers.add(new AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: row*150),
+      ));
+      _tokenAnimationControllers[i].addListener(() {
+        setState(() {});
+      });
+      _tokenAnimations.add(new Tween(
+        begin: (row * -110).toDouble(),
+        end: 0.toDouble(),
+      ).animate(new CurvedAnimation(
+          parent: _tokenAnimationControllers[i], curve: Curves.bounceOut)));
+    }
 
     _gameOverAnimationController = new AnimationController(
       duration: const Duration(milliseconds: 2000),
@@ -90,6 +113,8 @@ class _GameControllerState extends State<GameController>
   }
 
   List<TokenSlot> _gameItems;
+  List<AnimationController> _tokenAnimationControllers;
+  List<Animation> _tokenAnimations;
   ePlayer _currentPlayer = ePlayer.player1;
   bool _isGameOver = false;
 
@@ -100,6 +125,7 @@ class _GameControllerState extends State<GameController>
       _isGameOver = false;
     });
     _gameOverAnimationController.reset();
+    _tokenAnimationControllers.forEach((c)=>c.reset());
   }
 
   List<TokenSlot> getDefaultGameItems() {
